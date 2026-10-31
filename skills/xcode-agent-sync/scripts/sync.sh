@@ -170,6 +170,23 @@ list_skills() {
   done | sort
 }
 
+# 'skills export' writes SKILL.md frontmatter keys in a different order on each
+# run, so frontmatter lines are compared sorted and the body as-is.
+normalized_skill_md() {
+  if [ "$(head -n1 "$1")" = "---" ]; then
+    sed -n '1,/^---$/p' "$1" | sort
+    sed '1,/^---$/d' "$1"
+  else
+    cat "$1"
+  fi
+}
+
+same_skill() {
+  diff -rq -x SKILL.md "$1" "$2" >/dev/null 2>&1 &&
+    [ -f "$1/SKILL.md" ] && [ -f "$2/SKILL.md" ] &&
+    [ "$(normalized_skill_md "$1/SKILL.md")" = "$(normalized_skill_md "$2/SKILL.md")" ]
+}
+
 # Skill names recorded by a previous sync (manifest lines after the header).
 manifest_skills() {
   if [ -f "$1" ]; then grep -v '^#' "$1" | sed '/^$/d' | sort; fi
@@ -203,7 +220,7 @@ sync_skills() {
   for n in $names; do
     if [ ! -d "$dest/$n" ]; then
       added="$added $n"
-    elif ! diff -rq "$src/$n" "$dest/$n" >/dev/null 2>&1; then
+    elif ! same_skill "$src/$n" "$dest/$n"; then
       updated="$updated $n"
     fi
   done
