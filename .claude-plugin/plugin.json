@@ -1,0 +1,7 @@
+{
+  "name": "xcode-agent-sync",
+  "version": "1.0.0",
+  "description": "Keep Claude Code in sync with the newest Xcode: installs Xcode's agent skills and the Xcode MCP server, then verifies them.",
+  "license": "MIT",
+  "keywords": ["xcode", "mcp", "skills", "ios", "swift"]
+}

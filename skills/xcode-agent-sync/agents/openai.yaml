@@ -1,0 +1,3 @@
+interface:
+  display_name: "Xcode Agent Sync"
+  short_description: "Install the latest Xcode skills and MCP server"

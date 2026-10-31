@@ -1,0 +1,13 @@
+{
+  "name": "xcode-agent-sync",
+  "owner": {
+    "name": "Bunn"
+  },
+  "plugins": [
+    {
+      "name": "xcode-agent-sync",
+      "source": "./",
+      "description": "Install the newest Xcode's agent skills and MCP server, then verify them."
+    }
+  ]
+}
