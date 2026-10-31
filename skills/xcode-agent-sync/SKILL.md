@@ -28,7 +28,8 @@ It will:
 
    The source is Xcode's packaged agent plugin (`xcrun agent plugin path`),
    which carries every skill in an agent-specific form. The script falls back to
-   `xcrun agent skills export` on older Xcodes. Only skills it installed are
+   `xcrun agent skills export` on older Xcodes, and when the plugin ships no
+   skills (Xcode 27.2). Only skills it installed are
    updated or removed (tracked in `.xcode-agent-sync` in each skills dir).
    The user's own skills are never touched.
 3. Add the `xcode` MCP server (`xcrun mcpbridge`) if it's missing: user

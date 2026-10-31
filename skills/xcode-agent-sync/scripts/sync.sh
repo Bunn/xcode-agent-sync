@@ -146,10 +146,11 @@ skills_dir_for() {
 
 # Prints the directory holding this Xcode's skills, formatted for the agent.
 # Prefers the packaged plugin (agent-specific, superset of 'skills export');
-# falls back to 'skills export' for Xcode versions without plugin support.
+# falls back to 'skills export' when the plugin is missing or ships no skills
+# (Xcode 27.2 materializes an empty plugin skills dir).
 source_skills_dir() {
   local agent="$1" p out
-  if p="$(xcrun agent plugin path --plugin-format "$agent" 2>/dev/null)" && [ -d "$p/skills" ]; then
+  if p="$(xcrun agent plugin path --plugin-format "$agent" 2>/dev/null)" && [ -n "$(list_skills "$p/skills")" ]; then
     echo "$p/skills"
     return
   fi

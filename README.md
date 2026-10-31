@@ -73,7 +73,7 @@ skills/xcode-agent-sync/scripts/sync.sh --update-clis   # also run claude/codex 
 
 | Step | Detail |
 | --- | --- |
-| Skill source | `xcrun agent plugin path --plugin-format <claude\|codex>`: Xcode's packaged plugin, which carries the complete skill set in each agent's format. Falls back to `xcrun agent skills export` on Xcodes without plugin support. |
+| Skill source | `xcrun agent plugin path --plugin-format <claude\|codex>`: Xcode's packaged plugin, which carries the complete skill set in each agent's format. Falls back to `xcrun agent skills export` on Xcodes without plugin support, or whose plugin ships no skills (Xcode 27.2). |
 | Skill targets | Claude Code: `~/.claude/skills` (or `$CLAUDE_CONFIG_DIR/skills`). Codex: `~/.agents/skills`. Override with `XAS_CLAUDE_SKILLS_DIR` / `XAS_CODEX_SKILLS_DIR`. |
 | Ownership | A `.xcode-agent-sync` manifest in each skills dir lists the skills the script manages, so it never deletes skills it didn't install. |
 | Up to date? | Each installed skill is compared file by file (`diff -r`) against what the selected Xcode ships. A version number alone could miss a changed skill. |
