@@ -36,11 +36,11 @@ Code** and **Codex** that does the full update in one step:
 ## Install
 
 ```bash
-git clone https://github.com/Bunn/Xcode-agent-sync.git
+git clone https://github.com/Bunn/xcode-agent-sync.git
 ```
 
 ```bash
-./Xcode-agent-sync/install.sh --run
+./xcode-agent-sync/install.sh --run
 ```
 
 `install.sh` symlinks the skill into `~/.claude/skills` and `~/.agents/skills`,
@@ -48,9 +48,9 @@ so a later `git pull` updates it. Pass `--copy` to copy it instead.
 
 Other options:
 
-- **Claude Code plugin:** `/plugin marketplace add Bunn/Xcode-agent-sync`, then
+- **Claude Code plugin:** `/plugin marketplace add Bunn/xcode-agent-sync`, then
   `/plugin install xcode-agent-sync@xcode-agent-sync`.
-- **Any Agent Skills client:** `npx skills add Bunn/Xcode-agent-sync`.
+- **Any Agent Skills client:** `npx skills add Bunn/xcode-agent-sync`.
 
 ## Use
 
