@@ -146,10 +146,11 @@ skills_dir_for() {
 
 # Prints the directory holding this Xcode's skills, formatted for the agent.
 # Prefers the packaged plugin (agent-specific, superset of 'skills export');
-# falls back to 'skills export' for Xcode versions without plugin support.
+# falls back to 'skills export' when the plugin is missing or ships no skills
+# (Xcode 27.2 materializes an empty plugin skills dir).
 source_skills_dir() {
   local agent="$1" p out
-  if p="$(xcrun agent plugin path --plugin-format "$agent" 2>/dev/null)" && [ -d "$p/skills" ]; then
+  if p="$(xcrun agent plugin path --plugin-format "$agent" 2>/dev/null)" && [ -n "$(list_skills "$p/skills")" ]; then
     echo "$p/skills"
     return
   fi
@@ -167,6 +168,23 @@ list_skills() {
   for d in "$1"/*/; do
     if [ -f "$d/SKILL.md" ]; then basename "$d"; fi
   done | sort
+}
+
+# 'skills export' writes SKILL.md frontmatter keys in a different order on each
+# run, so frontmatter lines are compared sorted and the body as-is.
+normalized_skill_md() {
+  if [ "$(head -n1 "$1")" = "---" ]; then
+    sed -n '1,/^---$/p' "$1" | sort
+    sed '1,/^---$/d' "$1"
+  else
+    cat "$1"
+  fi
+}
+
+same_skill() {
+  diff -rq -x SKILL.md "$1" "$2" >/dev/null 2>&1 &&
+    [ -f "$1/SKILL.md" ] && [ -f "$2/SKILL.md" ] &&
+    [ "$(normalized_skill_md "$1/SKILL.md")" = "$(normalized_skill_md "$2/SKILL.md")" ]
 }
 
 # Skill names recorded by a previous sync (manifest lines after the header).
@@ -202,7 +220,7 @@ sync_skills() {
   for n in $names; do
     if [ ! -d "$dest/$n" ]; then
       added="$added $n"
-    elif ! diff -rq "$src/$n" "$dest/$n" >/dev/null 2>&1; then
+    elif ! same_skill "$src/$n" "$dest/$n"; then
       updated="$updated $n"
     fi
   done
